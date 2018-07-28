@@ -36,6 +36,7 @@ public class HouseIntroduction {
 	private String houseUnitPrice;
 	// 房屋优点标签集
 	private List<String> houseGoodTagList;
+	
 	public String getImgUrl() {
 		return imgUrl;
 	}

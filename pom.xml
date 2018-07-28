@@ -135,11 +135,11 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.10.1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.igfay</groupId>
+		<!-- <dependency>
+			<groupId>org.igfay</groupId> 
 			<artifactId>jfig</artifactId>
 			<version>2.3.1.0</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -155,11 +155,11 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>nl.justobjects</groupId>
 			<artifactId>pushlet</artifactId>
 			<version>2.0.4</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>commons-pool</groupId>
 			<artifactId>commons-pool</artifactId>
@@ -185,19 +185,19 @@
 			<artifactId>jsp-api</artifactId>
 			<version>2.2</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.taobao</groupId>
 			<artifactId>taobao-open-sdk</artifactId>
 			<version>20160309</version>
-		</dependency>
+		</dependency> -->
 
 		<!-- tddl 读写分离 start -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.taobao.tddl</groupId>
 			<artifactId>tddl-atom-datasource</artifactId>
 			<version>3.0.1.5</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>com.taobao.tddl</groupId>
 			<artifactId>tddl-common</artifactId>
 			<version>3.0.1.5</version>
@@ -207,32 +207,32 @@
 					<artifactId>spring</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>com.taobao.tddl</groupId>
 			<artifactId>tddl-group-datasource</artifactId>
 			<version>3.0.1.5</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>com.taobao.tddl</groupId>
 			<artifactId>tddl-interact</artifactId>
 			<version>3.0.1.5</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>com.taobao.tbdatasource</groupId>
 			<artifactId>tbdatasource</artifactId>
 			<version>3.0.1.5</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>com.taobao.diamond</groupId>
 			<artifactId>diamond-client</artifactId>
 			<version>2.0.5.3</version>
-		</dependency>
-		<dependency>
+		</dependency> -->
+		<!-- <dependency>
 			<groupId>com.taobao.diamond</groupId>
 			<artifactId>diamond-utils</artifactId>
 			<version>2.0.5.3</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>c3p0</groupId>
 			<artifactId>c3p0</artifactId>
