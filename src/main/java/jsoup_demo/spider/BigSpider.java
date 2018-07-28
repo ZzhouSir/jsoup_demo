@@ -3,8 +3,10 @@ package jsoup_demo.spider;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import jsoup_demo.model.HouseIntroduction;
+import jsoup_demo.util.Easyutil;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -33,12 +35,60 @@ public class BigSpider {
 	
 	public static void main(String[] args) {
 		BasicConfigurator.configure();
-//		System.out.println();
-		// 用户在console输入什么 我们可以给他当前什么类型的房屋数据
-			aSpider(BigSpider.PICK_URL);
+		Scanner sc = new Scanner(System.in);
+		List<HouseIntroduction> houses = aSpider(BigSpider.PICK_URL);
+		System.out.println("你想知道房屋的哪一方面的信息呢?");
+		while(sc.hasNext()){
+			String consoleStr = sc.next();
+			for(HouseIntroduction house : houses) {
+				if(consoleStr.equals("房屋图片")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋图片>--"+house.getImgUrl());
+				}
+				if(consoleStr.equals("下载房屋图片")) {
+					Easyutil.downloadPicForNews(house.getImgUrl(),"D:\\图片\\");	
+				}
+				if(consoleStr.equals("房屋信息标题")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋信息>--"+house.getTitle());
+				}
+				if(consoleStr.equals("房屋分布")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋分布>--"+house.getHouseDistribute());
+				}
+				if(consoleStr.equals("房屋面积")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋面积>--"+house.getHouseaArea());
+				}
+				if(consoleStr.equals("房屋朝向")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋朝向>--"+house.getHouseDirection());
+				}
+				if(consoleStr.equals("房屋楼层")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋楼层>--"+house.getHouseFloor());
+				}
+				if(consoleStr.equals("房屋装修")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋装修>--"+house.getHouseDecoration());
+				}
+				if(consoleStr.equals("房屋位置")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋位置>--"+house.getHouseLocation());
+				}
+				if(consoleStr.equals("房屋关注度")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋关注度>--"+house.getHouseAttention());
+				}
+				if(consoleStr.equals("房屋查看频率")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋查看频率>--"+house.getHouseLookRate());
+				}
+				if(consoleStr.equals("房屋信息发布时间")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋信息发布时间>--"+house.getHouseReleaseTime());
+				}
+				if(consoleStr.equals("房屋单价")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋单价>--"+house.getHouseUnitPrice());
+				}
+				if(consoleStr.equals("房屋优点标签集")) {
+					System.out.println("<"+house.getTitle()+">\n<房屋优点标签集>--"+house.getHouseGoodTagList().toString());
+				}
+				System.out.println("");
+			}
+		}
 	}
 	
-	public static void aSpider(String url) {
+	public static List<HouseIntroduction> aSpider(String url) {
 		try {
 			HttpClient httpClient = HttpClients.createDefault();
 			// 我爱我家全部楼盘左部分楼盘信息列表
@@ -55,36 +105,30 @@ public class BigSpider {
 			HttpResponse response = httpClient.execute(httpGet);
 	        String contents = EntityUtils.toString(response.getEntity(),"utf-8");
 	        Document document = Jsoup.parse(contents);
+	        System.out.println(document.toString());
 	        // 列表
 			Elements houseTabList = document.getElementsByClass("list-con-box").select("ul.pList").select("li");
 			List<HouseIntroduction> houseIntroList = new ArrayList<HouseIntroduction>();
-			HouseIntroduction aHouse = new HouseIntroduction();
-			System.out.println(document.toString());
-			if(null == houseTabList || houseTabList.size() == 0){
-				throw new RuntimeException("该网站怕是检测到了呀!!!!请注意");
+			if(StringUtils.isEmpty(contents)){
+				throw new RuntimeException("该网站怕是被检测到了呀!!!!请注意");
 			}
 			for(Element e: houseTabList) {
+				HouseIntroduction aHouse = new HouseIntroduction();
 				// 解析房屋示例图片Div
 				Elements houseImgDiv = e.getElementsByClass("listImg");
-				String titleImgUrl = houseImgDiv.select("img.lazy").attr("abs:src");
+				String titleImgUrl = StringUtils.isEmpty(houseImgDiv.select("img.lazy").attr("abs:src"))?houseImgDiv.select("img.lazy").attr("abs:data-src"):houseImgDiv.select("img.lazy").attr("abs:src");
 				// 房屋实例图片
 				aHouse.setImgUrl(titleImgUrl);
 				Elements houseContentDiv = e.getElementsByClass("listCon");
 				String houseTitle = houseContentDiv.select("h3.listTit").select("a").html();
 				// 房屋信息标题
 				aHouse.setTitle(houseTitle);
-				Elements houseSummarys = houseContentDiv.select("div.listX").select("p");
+				Elements listXEle = houseContentDiv.select("div.listX");
+				Elements houseSummarys = listXEle.select("p");
 				// 标题下的三行
 				String oneRowText = houseSummarys.get(0).text().replaceAll(" · ", "·");
 				String twoRowText = houseSummarys.get(1).text().replaceAll(" · ", "·");
 				String threeRowText = houseSummarys.get(2).text().replaceAll(" · ", "·");
-				System.out.println(oneRowText.split("·").length);
-				System.out.println(oneRowText.split("·")[0]);
-				System.out.println(oneRowText.split("·")[1]);
-				System.out.println(oneRowText.split("·")[2]);
-				System.out.println(oneRowText.split("·")[3]);
-				System.out.println(oneRowText.split("·")[4]);
-				System.out.println(threeRowText.split("·")[0]);
 				// 房屋分布
 				aHouse.setHouseDistribute("" != oneRowText && null != oneRowText && oneRowText.length() == 5 && StringUtils.isEmpty((oneRowText.split("·")[0]))?"":oneRowText.split("·")[0]);
 				// 房屋面积
@@ -94,7 +138,9 @@ public class BigSpider {
 				// 房屋楼层
 				aHouse.setHouseFloor("" != oneRowText && null != oneRowText && oneRowText.length() == 5 && StringUtils.isEmpty((oneRowText.split("·")[3]))?"":oneRowText.split("·")[3]);
 				// 房屋装修
-				aHouse.setHouseDecoration("" != oneRowText && null != oneRowText && oneRowText.length() == 5 && StringUtils.isEmpty((oneRowText.split("·")[4]))?"":oneRowText.split("·")[4]);
+				if(5 == oneRowText.length()) {
+					aHouse.setHouseDecoration("" != oneRowText && null != oneRowText && oneRowText.length() == 5 && StringUtils.isEmpty((oneRowText.split("·")[4]))?"":oneRowText.split("·")[4]);
+				}
 				// 房屋位置
 				aHouse.setHouseLocation("" != twoRowText && null != twoRowText && twoRowText.length() == 1 && StringUtils.isEmpty((twoRowText.split("·")[0]))?"":twoRowText.split("·")[0]);
 				// 房屋关注度
@@ -103,15 +149,28 @@ public class BigSpider {
 				aHouse.setHouseLookRate("" != threeRowText && null != threeRowText && threeRowText.length() == 3 && StringUtils.isEmpty((threeRowText.split("·")[1]))?"":threeRowText.split("·")[1]);
 				// 房屋发布时间
 				aHouse.setHouseReleaseTime("" != threeRowText && null != threeRowText && threeRowText.length() == 3 && StringUtils.isEmpty((threeRowText.split("·")[2]))?"":threeRowText.split("·")[2]);
-				
 				// 总价 单价
-				
+				Elements jiaDiv = listXEle.select("div.jia"); 
+				String houseTotalPrice = jiaDiv.text().split(" ")[0];
+				String houseUnitPrice = jiaDiv.text().split(" ")[1];
+				aHouse.setHouseTotalPrice(houseTotalPrice);
+				aHouse.setHouseUnitPrice(houseUnitPrice);
 				// 标签集
+				Elements listTagDiv = houseContentDiv.select("div.listTag").select("span");
+				List<String> houseTagList = new ArrayList<String>();
+				if(listTagDiv.size() > 0) {
+					for(Element tagEle : listTagDiv) {
+						houseTagList.add(tagEle.text());
+					}
+				}
+				aHouse.setHouseGoodTagList(houseTagList);
 				houseIntroList.add(aHouse);
 			}
+			return houseIntroList;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 

@@ -1,10 +1,13 @@
 package jsoup_demo.util;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
+
 
 public class Easyutil {
 	
@@ -15,28 +18,30 @@ public class Easyutil {
      * @param localPath 本地保存图片地址 
      * @return 
      */  
-    public String downloadPicForNews(String picUrl,String localPath){  
+    public static void downloadPicForNews(String picUrl,String localPath){  
         String filePath = "";  
         String url = "";  
+        System.out.println("开始下载图片......");
         try {    
            URL httpurl = new URL(picUrl);  
            HttpURLConnection urlcon = (HttpURLConnection) httpurl.openConnection();  
+           System.out.println("下载中......");
            urlcon.setReadTimeout(3000);  
            urlcon.setConnectTimeout(3000);  
+           System.out.println("下载中......");
            int state = urlcon.getResponseCode(); //图片状态  
            if(state == 200){  
                String fileName = getFileNameFromUrl(picUrl);    
                filePath = localPath + fileName;  
+               System.out.println("下载中......");
                File f = new File(filePath);    
                FileUtils.copyURLToFile(httpurl, f);   
-//               Function fun = new Function();  
-//               url = filePath.replace("/www/web/imgs", fun.getProValue("IMG_PATH"));  
-           }  
+           }
+           System.out.println("下载完成！！！");
         } catch (Exception e) {    
+        	System.out.println("下载失败！！！");
             e.printStackTrace();   
-            return null;    
         }   
-        return url;  
     }
     
     /** 
@@ -55,4 +60,30 @@ public class Easyutil {
         String name = new Long(System.currentTimeMillis()).toString()+ i + sux;   
         return name;    
     }  
+    
+    public static void downloadImgToLocalPath(String fromPath,String toPath) {
+    	FileOutputStream out = null;
+    	InputStream ins = null;
+    	try {
+	    	URL url = new URL(fromPath);
+	    	HttpURLConnection con = (HttpURLConnection) url.openConnection();
+	        out = new FileOutputStream(toPath);
+	        ins = con.getInputStream();
+	        byte[] b = new byte[1024];
+	        int i=0;
+	        while((i=ins.read(b))!=-1){
+	            out.write(b, 0, i);
+	        }
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}finally {
+    		if(null != ins) {
+    			try {ins.close();}catch(Exception e) {e.printStackTrace();}
+    		}
+    		if(null != out) {
+    			try {out.close();}catch(Exception e) {e.printStackTrace();}
+    		}
+		}
+        
+    }
 }
